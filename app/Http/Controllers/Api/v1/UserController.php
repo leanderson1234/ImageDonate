@@ -18,12 +18,12 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         $this->user = $user;
-        
+
         $this->middleware('auth:api')->except('store');
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *@param  App\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -84,26 +84,26 @@ class UserController extends Controller
                         Storage::delete("{$this->path}/{$user->image_path}");
                     }
                 }
-    
+
                 $name = Str::kebab($request->name);
-                
+
                 $extension = $request->image_path->extension();
-               
+
                 $nameFile = md5(time().$name).'.'.$extension;
                 $data['image_path'] ="storage/perfil/{$nameFile}";
                 $upload = $request->image_path->storeAs($this->path,$nameFile);
-    
+
                 if(!$upload) return response()->json(['error' =>'Fail Upload'],500);
             }
-            
-            
+
+
             $user->update($data);
-            
+
             return response()->json($user);
         }else{
             return response()->json(['error'=>'permission denied'],403);
         }
-        
+
     }
 
     /**
